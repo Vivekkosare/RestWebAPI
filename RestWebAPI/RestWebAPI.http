@@ -1,0 +1,11 @@
+@RestWebAPI_HostAddress = http://localhost:5169
+
+GET {{RestWebAPI_HostAddress}}/todos/
+Accept: application/json
+
+###
+
+GET {{RestWebAPI_HostAddress}}/todos/1
+Accept: application/json
+
+###
