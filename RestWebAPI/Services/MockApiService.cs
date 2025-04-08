@@ -12,7 +12,6 @@ namespace RestWebAPI.Services
             var client = _httpClientFactory.CreateClient();
             try
             {
-
                 var response = await client.PostAsJsonAsync(_baseUrl, phone);
                 response.EnsureSuccessStatusCode();
                 var content = await response.Content.ReadAsStringAsync();
@@ -46,7 +45,8 @@ namespace RestWebAPI.Services
                 }
 
                 var errorContent = response.Content.ReadAsStringAsync();
-                var error = $"Failed to delete phone with Id: {id}, Error: {errorContent}, ErrorCode: {response.StatusCode}";
+                var error = $"Failed to delete phone with Id: {id}, Error: {errorContent}, " +
+                    $"ErrorCode: {response.StatusCode}";
 
                 _logger.LogWarning(error);
                 return Result<object>.Failure(error);
@@ -82,7 +82,8 @@ namespace RestWebAPI.Services
             }
         }
 
-        public async Task<Result<List<Phone>>> GetPhonesAsync()
+        public async Task<Result<List<Phone>>> GetPhonesAsync(int? page = 1, int? pageSize = 10, 
+            string? name = null)
         {
             var client = _httpClientFactory.CreateClient();
             try
@@ -94,7 +95,15 @@ namespace RestWebAPI.Services
                 {
                     return Result<List<Phone>>.Failure("Could not retrieve the list of phones");
                 }
-                return Result<List<Phone>>.Success(content.GetDeserializedObject<List<Phone>>());
+                var phones = (content.GetDeserializedObject<List<Phone>>());
+                if (!string.IsNullOrWhiteSpace(name))
+                {
+                    phones = phones.Where(p => p.Name.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
+                }
+                phones = phones
+                    .Skip((page.Value - 1) * pageSize.Value)
+                    .Take(pageSize.Value).ToList();
+                return Result<List<Phone>>.Success(phones);
             }
             catch (Exception ex)
             {
