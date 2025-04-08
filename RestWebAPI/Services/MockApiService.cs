@@ -1,5 +1,6 @@
 ﻿using RestWebAPI.Entities;
 using RestWebAPI.Extensions;
+using System.Net;
 
 namespace RestWebAPI.Services
 {
@@ -17,19 +18,19 @@ namespace RestWebAPI.Services
                 var content = await response.Content.ReadAsStringAsync();
                 if (string.IsNullOrWhiteSpace(content))
                 {
-                    return Result<Phone>.Failure("Failed to add phone");
+                    return Result<Phone>.Failure("Failed to add phone", HttpStatusCode.BadRequest);
                 }
                 return Result<Phone>.Success(content.GetDeserializedObject<Phone>());
             }
             catch (HttpRequestException ex)
             {
                 _logger.LogError(ex, "HttpException occured while adding phone");
-                return Result<Phone>.Failure(ex.Message);
+                return Result<Phone>.Failure(ex.Message, HttpStatusCode.InternalServerError);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Something happened while adding phone");
-                return Result<Phone>.Failure(ex.Message);
+                return Result<Phone>.Failure(ex.Message, HttpStatusCode.InternalServerError);
             }
         }
 
@@ -49,12 +50,12 @@ namespace RestWebAPI.Services
                     $"ErrorCode: {response.StatusCode}";
 
                 _logger.LogWarning(error);
-                return Result<object>.Failure(error);
+                return Result<object>.Failure(error, response.StatusCode);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"An exception occured while deleting phone with id: {id}");
-                return Result<object>.Failure(ex.Message);
+                return Result<object>.Failure(ex.Message, HttpStatusCode.InternalServerError);
             }
         }
 
@@ -71,14 +72,14 @@ namespace RestWebAPI.Services
                 {
                     var warning = $"Could not find the phone with Id: {id}";
                     _logger.LogWarning(warning);
-                    return Result<Phone>.Failure(warning);
+                    return Result<Phone>.Failure(warning, HttpStatusCode.NotFound);
                 }
                 return Result<Phone>.Success(content.GetDeserializedObject<Phone>());
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Something happened while getting phone");
-                return Result<Phone>.Failure(ex.Message);
+                return Result<Phone>.Failure(ex.Message, HttpStatusCode.InternalServerError);
             }
         }
 
@@ -93,7 +94,8 @@ namespace RestWebAPI.Services
                 var content = await response.Content.ReadAsStringAsync();
                 if (string.IsNullOrWhiteSpace(content))
                 {
-                    return Result<List<Phone>>.Failure("Could not retrieve the list of phones");
+                    return Result<List<Phone>>.Failure("Could not retrieve the list of phones",
+                    HttpStatusCode.NotFound);
                 }
                 var phones = (content.GetDeserializedObject<List<Phone>>());
                 if (!string.IsNullOrWhiteSpace(name))
@@ -108,7 +110,7 @@ namespace RestWebAPI.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occured while fetching phones");
-                return Result<List<Phone>>.Failure(ex.Message);
+                return Result<List<Phone>>.Failure(ex.Message, HttpStatusCode.InternalServerError);
             }
         }
     }
