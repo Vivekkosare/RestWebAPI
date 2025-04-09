@@ -1,11 +1,40 @@
-@RestWebAPI_HostAddress = http://localhost:5169
+@RestWebAPI_HostAddress = http://localhost:5169/mockdata
 
-# GET {{RestWebAPI_HostAddress}}/todos/
-# Accept: application/json
 
-# ###
+### Create new mock data
+POST {{RestWebAPI_HostAddress}}
+Content-Type: application/json
 
-# GET {{RestWebAPI_HostAddress}}/todos/1
-# Accept: application/json
+{
+  "name": "Apple iPhone 16, 1TB",
+  "data": {
+    "price": 1999.99,
+    "color": "Platinum"
+  }
+}
 
 ###
+
+### Get all mock data
+GET {{RestWebAPI_HostAddress}}
+
+### Get mock data by ID
+GET {{RestWebAPI_HostAddress}}/ff808181932badb601961ab7410347c9
+
+### Delete mock data by ID
+DELETE {{RestWebAPI_HostAddress}}/ff808181932badb601961ab7410347c9
+
+### Update mock data
+PUT {{RestWebAPI_HostAddress}}
+Content-Type: application/json
+
+{
+  "id": "ff808181932badb601961ab7410347c9",
+  "name": "Apple iPhone 16, 1TB",
+  "data": {
+    "price": 2199.99,
+    "color": "Blue"
+  }
+}
+
+

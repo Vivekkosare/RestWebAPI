@@ -6,12 +6,28 @@ using System.Net;
 
 namespace RestWebAPI.Services
 {
-    public class MockApiService(IHttpClientFactory _httpClientFactory,
-        ILogger<MockApiService> _logger,
-        IValidator<Phone> _validator,
-        IValidator<PhoneInput> _validatorPhoneInput) : IMockApiService
+    public class MockApiService: IMockApiService
+        
     {
-        private static string _baseUrl = "https://api.restful-api.dev/objects";
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly ILogger<MockApiService> _logger;
+        private readonly IValidator<Phone> _validator;
+        private readonly IValidator<PhoneInput> _validatorPhoneInput;
+        private readonly IConfiguration _configuration;
+         private static string _baseUrl = string.Empty;
+        public MockApiService(IHttpClientFactory httpClientFactory,
+            ILogger<MockApiService> logger,
+            IValidator<Phone> validator,
+            IValidator<PhoneInput> validatorPhoneInput,
+            IConfiguration configuration) 
+        {
+            _httpClientFactory = httpClientFactory;
+            _logger = logger;
+            _validator = validator;
+            _validatorPhoneInput = validatorPhoneInput;
+            _configuration = configuration;
+            _baseUrl = _configuration["baseUrl"];
+        }
         public async Task<Result<Phone>> AddPhoneAsync(PhoneInput phone)
         {
             var client = _httpClientFactory.CreateClient();
