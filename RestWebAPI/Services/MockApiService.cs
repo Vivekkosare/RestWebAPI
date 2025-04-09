@@ -34,7 +34,7 @@ namespace RestWebAPI.Services
             }
         }
 
-        public async Task<object> DeletePhone(int id)
+        public async Task<Result<object>> DeletePhone(int id)
         {
             var client = _httpClientFactory.CreateClient();
             try

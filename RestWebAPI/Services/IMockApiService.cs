@@ -8,7 +8,7 @@ namespace RestWebAPI.Services
             string? name = null);
         Task<Result<Phone>> GetPhoneAsync(int id);
         Task<Result<Phone>> AddPhoneAsync(Phone phone);
-        Task<object> DeletePhone(int id);
+        Task<Result<object>> DeletePhone(int id);
 
     }
 }
