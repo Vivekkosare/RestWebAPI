@@ -24,11 +24,11 @@ namespace RestWebAPI.Entities
             StatusCode = statusCode;
         }
         public static Result<T> Success(T value) =>
-            new Result<T>(true, value, null, HttpStatusCode.OK);
+            new Result<T>(true, value, default!, HttpStatusCode.OK);
         public static Result<T> Success() =>
             new Result<T>(true, HttpStatusCode.OK);
 
         public static Result<T> Failure(string error, HttpStatusCode statusCode) =>
-            new Result<T>(false, default, error, statusCode);
+            new Result<T>(false, default!, error, statusCode);
     }
 }
