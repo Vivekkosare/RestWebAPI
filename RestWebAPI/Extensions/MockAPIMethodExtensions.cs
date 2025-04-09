@@ -9,7 +9,6 @@ namespace RestWebAPI.Extensions
     {
         public static IEndpointRouteBuilder RouteMockAPIEndpoints(this IEndpointRouteBuilder builder)
         {
-            //builder.MapGroup("/mockdata");
 
             /// <summary>
             /// Get all phones
@@ -20,8 +19,8 @@ namespace RestWebAPI.Extensions
             /// <param name="name"></param>
             /// <returns></returns>
             /// <response code="200">Phones retrieved successfully</response>
-            builder.MapGet("/mockdata/", async (IMockApiService apiService, [FromQuery] int? page,
-                [FromQuery] int? pageSize, [FromQuery] string? name) =>
+            builder.MapGet("/mockdata/", async (IMockApiService apiService, [FromQuery] int page = 1,
+                [FromQuery] int pageSize = 10, [FromQuery] string name = null) =>
             {
                 var result = await apiService.GetPhonesAsync(page, pageSize, name);
                 if (result.IsSuccess)

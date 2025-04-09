@@ -1,10 +1,18 @@
-﻿namespace RestWebAPI.Entities
+﻿using Newtonsoft.Json;
+
+namespace RestWebAPI.Entities
 {
     public class Phone
     {
+        [JsonProperty("id")]
         public int Id { get; set; }
+
+        [JsonProperty("name")]
         public string Name { get; set; }
-        public Dictionary<string, object> Data { get; set; }
+
+        [JsonProperty("data")]
+        public Dictionary<string, object> Data { get; set; } = new Dictionary<string, object>();
+
     }
 
 

@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+﻿using Newtonsoft.Json;
 
 namespace RestWebAPI.Extensions
 {
@@ -6,11 +6,11 @@ namespace RestWebAPI.Extensions
     {
         public static T GetDeserializedObject<T>(this string content)
         {
-            var options = new JsonSerializerOptions
+            var settings = new JsonSerializerSettings
             {
-                DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+                NullValueHandling = NullValueHandling.Ignore
             };
-            return JsonSerializer.Deserialize<T>(content, options);
+            return JsonConvert.DeserializeObject<T>(content, settings);
         }
     }
 }

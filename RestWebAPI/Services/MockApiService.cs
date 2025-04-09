@@ -83,8 +83,8 @@ namespace RestWebAPI.Services
             }
         }
 
-        public async Task<Result<List<Phone>>> GetPhonesAsync(int? page = 1, int? pageSize = 10, 
-            string? name = null)
+        public async Task<Result<List<Phone>>> GetPhonesAsync(int page = 1, int pageSize = 10, 
+            string name = null)
         {
             var client = _httpClientFactory.CreateClient();
             try
@@ -103,8 +103,8 @@ namespace RestWebAPI.Services
                     phones = phones.Where(p => p.Name.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
                 }
                 phones = phones
-                    .Skip((page.Value - 1) * pageSize.Value)
-                    .Take(pageSize.Value).ToList();
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize).ToList();
                 return Result<List<Phone>>.Success(phones);
             }
             catch (Exception ex)
