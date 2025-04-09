@@ -14,4 +14,5 @@ Run this command under the project folder: dotnet build
 dotnet run
 Send request from RestWebAPI.http file
 
-   
+   <img width="1204" alt="image" src="https://github.com/user-attachments/assets/cf489039-723e-45f8-8d05-5100655d5f46" />
+
